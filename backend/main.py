@@ -45,7 +45,7 @@ async def process_invoices(files: list[UploadFile], language: str = Form("chi_si
         if file.filename.endswith('.zip'):
             # 保存 ZIP 文件到指定目录
             unique_filename = f"{uuid.uuid4()}_{file.filename}"  # 确保文件名唯一
-            zip_path = output_dir / file.unique_filename
+            zip_path = output_dir / unique_filename
             async with aiofiles.open(zip_path, mode="wb") as f:
                 await f.write(await file.read())
             # 调用解压函数
