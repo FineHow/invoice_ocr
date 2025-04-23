@@ -1,6 +1,16 @@
 # invoice_OCR-增值税发票识别
 
-## 后端环境配置
+## 😄效果展示
+
+### 支持压缩包形式批量导入
+
+![1745376751331](images/README/1745376751331.png)
+
+### 支持多份PDF文件多页批量导入
+
+![1745376927488](images/README/1745376927488.png)
+
+## 🧷后端环境配置
 
 git clone  https://github.com/FineHow/invoice_ocr.git
 
@@ -24,7 +34,7 @@ uvicorn main:app --host 0.0.0.0 --port 8000
 
 ```
 
-## 前端环境配置
+## 🛩前端环境配置
 
 ```
 cd frontend
