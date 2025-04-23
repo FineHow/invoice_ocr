@@ -1,6 +1,6 @@
 <template>
   <div class="container">
-    <h1>-----------------批量发票识别系统-------------</h1>
+    <h1>-----------------批量发票识别系统--------------</h1>
     <!-- <el-button type="primary" @click="push">去往上传页面</el-button> -->
     <form @submit.prevent="handleUpload">
       <input type="file" multiple @change="handleFileChange" />
@@ -16,7 +16,14 @@
 				<el-table-column label="文件名" align="center" prop="file"/>
 				<el-table-column label="页数" align="center" prop="page"/>
 				<el-table-column label="发票号码" align="center" prop="text.invoice_number"/>
+        <el-table-column label="开票日期" align="center" prop="text.invoice_date"/>
+        <el-table-column label="购买方名称" align="center" prop="text.buyer_name"/>
 				<el-table-column label="纳税人识别号" align="center" prop="text.buyer_tax_number"/>
+				<el-table-column label="金额" align="center" prop="text.amount"/>
+				<el-table-column label="税率" align="center" prop="text.tax_rate"/>
+				<el-table-column label="税额" align="center" prop="text.tax_amount"/>
+				
+				
 			</el-table>
     </div>
   </div>
