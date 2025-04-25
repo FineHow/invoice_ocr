@@ -1,10 +1,18 @@
-# invoice_OCR-增值税发票识别
+<div align="center">
+<a name="readme-top"></a>
+<img height="120" src="https://img.icons8.com/?size=100&id=r3Bj0vDMZ1Fi&format=png&color=000000">
+<img height="120" src="https://gw.alipayobjects.com/zos/kitchen/qJ3l3EPsdW/split.svg">
+<img height="120" src="https://img.icons8.com/?size=100&id=3jnrVS52owjR&format=png&color=000000">
+<p align="center"><a name="readme-top" ><h2> invoice_OCR 增值税发票识别</h2></a><p align="center">
+</div>
 
-这是一个基于FASTAPI的增值税发票批量识别✨，ocr服务支持umiocr,tessartocr,带vision的ai模型🐱‍👓。支持批量输入PDF电子发票，格式化识别其中内容，提供相应的WEB页面操作增值税。
+✨这是一个基于FASTAPI的增值税发票批量识别系统。
+🐱‍👓OCR服务支持umiocr,tessartocr,带vision的ai模型*[目前支持gemma3:4b,后期将更新...]*，支持批量输入PDF电子发票/ZIP压缩包(pdf,ofd,xml)三类电子发票格式，格式化识别其中内容，提供相应的WEB页面上传发票，获取信息并返回下载excel。
 
-20250425更新：增加ofd格式，xml 解压识别模块
+更新LOG:
+🤦‍♂️20250425更新：增加ofd格式，xml 解压识别模块
 
-## 😄效果展示
+## web效果展示
 
 ### 支持压缩包形式批量导入
 
@@ -35,7 +43,6 @@ pip install -r requirements.txt
 cd..
 #启动后台
 uvicorn main:app --host 0.0.0.0 --port 8000
-
 ```
 
 ## 🛩前端环境配置
@@ -51,4 +58,4 @@ npm install
 npm run dev
 ```
 
-* env设置 放入后端ocr服务地址
+* env设置 放入后端ocr服务地址,GEMMA3:4B地址,umiocr地址
