@@ -3,7 +3,7 @@
 <img height="120" src="https://img.icons8.com/?size=100&id=r3Bj0vDMZ1Fi&format=png&color=000000">
 <img height="120" src="https://gw.alipayobjects.com/zos/kitchen/qJ3l3EPsdW/split.svg">
 <img height="120" src="https://img.icons8.com/?size=100&id=3jnrVS52owjR&format=png&color=000000">
-<p align="center"><a name="readme-top" ><h2> invoice_OCR 增值税发票识别</h2></a><p align="center">
+<p align="center"><a name="readme-top" ><h1> invoice_OCR 增值税发票识别</h1></a><p align="center">
 </div>
 
 ✨这是一个基于FASTAPI的增值税发票批量识别系统。
@@ -59,3 +59,4 @@ npm run dev
 ```
 
 * env设置 放入后端ocr服务地址,GEMMA3:4B地址,umiocr地址
+
