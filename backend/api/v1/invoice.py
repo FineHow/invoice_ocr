@@ -6,16 +6,13 @@ import openpyxl
 import aiofiles
 import uuid
 from pathlib import Path
-from backend.utils  import  umi_ocr,umi_invoice_data
+from backend.core.utils  import  umi_ocr,umi_invoice_data
 from backend.core.ziprar import handle_zip_uploaded
 from fastapi.middleware.cors import CORSMiddleware
 from PIL import Image
 import numpy as np
 from dotenv import load_dotenv
 from backend.core.config import settings
-
-
-
 
 # 加载环境变量
 # load_dotenv()
@@ -124,5 +121,3 @@ async def process_invoices(files: list[UploadFile], language: str = Form("chi_si
     }
 
     return body
-            
-

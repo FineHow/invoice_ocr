@@ -1,19 +1,8 @@
 from fastapi import FastAPI
 from backend.api.v1 import  invoice,download
 from backend.core.config import settings
-
-
 import requests
 from fastapi.middleware.cors import CORSMiddleware
-from dotenv import load_dotenv
-import os
-
-# 加载环境变量
-# settings = settings()
-load_dotenv()
-OCR_API_BASE_URL = os.getenv("OCR_API_BASE_URL")
-
-
 app = FastAPI()
 
 
@@ -22,11 +11,20 @@ app.include_router(invoice.router, prefix="/api/v1/invoice")
 app.include_router(download.router,prefix="/api/v1/download")
 
 
-# health检查
-@app.get("/")
+# health检查tessart
+@app.get("/tessart",tags=["ocr服务检查"])
 async def health_check():
     try:
-        response = requests.get(OCR_API_BASE_URL + "/")
+        response = requests.get(settings.OCR_API_BASE_URL + "/")
+        return {"message": response.json()}
+    except Exception as e:
+        return {"error": str(e)}
+
+# health检查umiocr
+@app.get("/umiocr",tags=["ocr服务检查"])
+async def health_check():
+    try:
+        response = requests.get(settings.UMIOCR_API_BASE_URL + "/")
         return {"message": response.json()}
     except Exception as e:
         return {"error": str(e)}

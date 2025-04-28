@@ -6,5 +6,8 @@
 .env.production
 env
 venv
+
+# Python
 /backend/__pycache__
 /backend/core/__pycache__
+/backend/api/v1/__pycache__

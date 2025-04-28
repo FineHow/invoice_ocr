@@ -5,7 +5,7 @@ from fastapi.responses import FileResponse
 import fitz  # PyMuPDF
 import requests
 from pathlib import Path
-from backend.utils  import perform_ocr, save_excel, extract_invoice_data, umi_ocr,umi_invoice_data
+from backend.core.utils  import perform_ocr, save_excel, extract_invoice_data, umi_ocr,umi_invoice_data
 from backend.core.modelpro import extract_invoice_data_with_gemma,test_gemma_chat
 from backend.core.download import save_excel
 from backend.core.ziprar import handle_zip_uploaded
