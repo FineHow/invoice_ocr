@@ -6,3 +6,4 @@
 .env.production
 env
 venv
+/backend/__pycache__
