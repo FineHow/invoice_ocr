@@ -1,4 +1,3 @@
-import logging
 import os
 from fastapi import FastAPI, UploadFile, Form
 import fitz  # PyMuPDF
@@ -8,26 +7,26 @@ import aiofiles
 import uuid
 from pathlib import Path
 from backend.utils  import  umi_ocr,umi_invoice_data
-from backend.ziprar import handle_zip_uploaded
+from backend.core.ziprar import handle_zip_uploaded
 from fastapi.middleware.cors import CORSMiddleware
-
 from PIL import Image
 import numpy as np
 from dotenv import load_dotenv
+from backend.core.config import settings
+
+
+
+
+# 加载环境变量
+# load_dotenv()
+# OCR_API_BASE_URL = os.getenv("OCR_API_BASE_URL")
+
+app = FastAPI()
+# 批量上传并处理发票
 
 from fastapi import APIRouter
 router = APIRouter()
-
-# 加载环境变量
-load_dotenv()
-OCR_API_BASE_URL = os.getenv("OCR_API_BASE_URL")
-
-app = FastAPI()
-
-
-
-# 批量上传并处理发票
-@app.post("/process_invoices/")
+@router.post("/process_invoices/", tags=["发票OCR识别处理"])
 async def process_invoices(files: list[UploadFile], language: str = Form("chi_sim")):
     output_dir = Path("backend/static/")
     output_dir.mkdir(parents=True, exist_ok=True)  # 确保路径存在
@@ -54,13 +53,12 @@ async def process_invoices(files: list[UploadFile], language: str = Form("chi_si
                 
                 for page_number in range(len(pdf_document)):
                     page = pdf_document[page_number]
-                    mat = fitz.Matrix(5, 5)  # 放大倍数
+                    mat = fitz.Matrix(5, 5)
                     pix = page.get_pixmap(matrix=mat)
 
                     # 保存页面图像为临时文件
                     temp_image_path = output_dir / f"{pdf_file.stem}_page_{page_number + 1}.png"
                     pix.save(temp_image_path)
-
                     # 调用 OCR 处理图像
                     ocr_result = umi_ocr(temp_image_path)
                     ocr_result = umi_invoice_data(ocr_result)
@@ -72,15 +70,15 @@ async def process_invoices(files: list[UploadFile], language: str = Form("chi_si
                         "text": ocr_result
                     })
 
-                    # 删除图像文件
+                    # 删除临时图像文件
                     temp_image_path.unlink()
 
                 pdf_document.close()
-                # 删除 PDF 文件
+                # 删除 PDF 
                 pdf_path.unlink()
 
         elif file.filename.endswith('.pdf'):
-            # 如果是 PDF 文件，单独处理
+            # 如果单独发送批量 PDF 文件
             pdf_path = output_dir / file.filename
             async with aiofiles.open(pdf_path, mode="wb") as f:
                 await f.write(await file.read())

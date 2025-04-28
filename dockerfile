@@ -1,29 +1,20 @@
-# 使用官方 Python 基础镜像
-FROM python:3.10-slim
-
-# 设置工作目录
+# Backend 镜像
+FROM python:3.10-slim AS backend
 WORKDIR /app
-
-# 复制项目的依赖文件
-COPY backend/requirements.txt /app/requirements.txt
-
-# 安装依赖
+COPY backend/requirements.txt .
 RUN pip install --no-cache-dir -r requirements.txt
+COPY backend/ .
+CMD ["gunicorn", "-w", "4", "-k", "uvicorn.workers.UvicornWorker", "backend.main:app"]
 
-# 复制项目代码到容器
-COPY backend/ /app/backend/
-COPY frontend/ /app/frontend/
+# Frontend 镜像
+FROM node:16 AS frontend
+WORKDIR /app
+COPY frontend/package.json frontend/package-lock.json ./
+RUN npm install
+COPY frontend/ .
+RUN npm run build
 
-# 暴露应用运行的端口（假设后端运行在 8000 端口）
-EXPOSE 8000
-
-# 安装 python-dotenv（如果需要）
-RUN pip install python-dotenv
-
-# 设置环境变量（从 .env 文件中加载）
-ENV APP_PORT=${APP_PORT}
-ENV APP_HOST=${APP_HOST}
-ENV UMIOCR_API_BASE_URL=${UMIOCR_API_BASE_URL}
-
-# 启动命令，使用环境变量
-CMD ["python", "backend/main.py"]
+# 使用 Nginx 提供静态文件
+FROM nginx:alpine AS production
+COPY --from=frontend /app/dist /usr/share/nginx/html
+COPY nginx.conf /etc/nginx/conf.d/default.conf
