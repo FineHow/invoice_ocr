@@ -2,5 +2,7 @@
 # Environments
 .env
 .venv
+.env.development
+.env.production
 env
 venv
