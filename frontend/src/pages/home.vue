@@ -22,6 +22,8 @@
   
   <script>
   import axios from "axios";
+  import { ElButton, ElTable, ElTableColumn } from "element-plus";
+  import { uploadInvoice } from "../api/api";
   
   export default {
     data() {
@@ -44,12 +46,15 @@
         formData.append("language", this.language);
   
         try {
-          const response = await axios.post("http://localhost:8000/process_invoices/", formData, {
-            headers: { "Content-Type": "multipart/form-data" },
+          const response = await uploadInvoice(formData, {
+            headers: {
+              "Content-Type": "multipart/form-data",
+            },
           });
-                console.log("请求成功:", response.data.extracted_data);
-                this.downloadUrl = response.data.excel_file_path;
-                this.ocrresult = response.data.data.extracted_data;
+            console.log("请求成功:", response.data.extracted_data);
+            this.downloadUrl = response.data.excel_file_path;
+            this.ocrresult = response.data.data.extracted_data;
+            console.log("请求luj:", this.downloadUrl,this.ocrresult);
         } catch (error) {
           console.error("处理发票失败:", error);
         }

@@ -11,6 +11,7 @@ else:
 class Settings:
     UMIOCR_API_BASE_URL = os.getenv("UMIOCR_API_BASE_URL")
     OCR_API_BASE_URL = os.getenv("OCR_API_BASE_URL")
+    OLLAMA_PROXY_URL = os.getenv("OLLAMA_PROXY_URL")
     APP_HOST = os.getenv("APP_HOST", "127.0.0.1")
     APP_PORT = int(os.getenv("APP_PORT", 8000))
     LOG_LEVEL = os.getenv("LOG_LEVEL", "DEBUG")

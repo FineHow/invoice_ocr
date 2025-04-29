@@ -1,18 +1,13 @@
 import requests
 import openpyxl
 import json
-
-from PIL import Image
-import numpy as np
 import re
 import base64
-import os
-from dotenv import load_dotenv
+from backend.core.config import settings
 # 加载环境变量
-load_dotenv()
-UMIOCR_API_BASE_URL = os.getenv("UMIOCR_API_BASE_URL")
-OCR_API_BASE_URL= os.getenv("OCR_API_BASE_URL")
-UMIOCR_API_BASE_URL = os.getenv("UMIOCR_API_BASE_URL")
+UMIOCR_API_BASE_URL = settings.UMIOCR_API_BASE_URL
+OCR_API_BASE_URL= settings.OCR_API_BASE_URL
+
 # OCR 和 Ollama 的 API 地址配置
 
 
@@ -106,20 +101,20 @@ def umi_invoice_data(ocr_text):
     
     return extracted_data
 
-def save_excel(data, output_file):
-    """将识别的文本保存到 Excel 文件"""
-    wb = openpyxl.Workbook()
-    ws = wb.active
-    ws.append(["File Name", "Page Number", "Extracted Text"])
+# def save_excel(data, output_file):
+#     """将识别的文本保存到 Excel 文件"""
+#     wb = openpyxl.Workbook()
+#     ws = wb.active
+#     ws.append(["File Name", "Page Number", "Extracted Text"])
 
-    for entry in data:
-        ws.append([
-            entry["file"],
-            entry["page"],
-            entry["text"]
-        ])
+#     for entry in data:
+#         ws.append([
+#             entry["file"],
+#             entry["page"],
+#             entry["text"]
+#         ])
 
-    wb.save(output_file)
+#     wb.save(output_file)
 
 
 def extract_invoice_data_with_gemma(image_path):

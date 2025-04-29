@@ -8,7 +8,11 @@
       <!-- <button type="submit">上传处理</button> -->
     </form>
     <div v-if="downloadUrl">
-      <a :href="downloadUrl">下载结果 Excel</a>
+      <a :href="downloadUrl" target="_blank">
+        <el-button type="success" icon="el-icon-download">
+          下载结果 Excel
+        </el-button>
+      </a>
     </div>
     <div>{{ downloadUrl }}</div>
     <div v-if="ocrresult">
@@ -22,16 +26,13 @@
 				<el-table-column label="金额" align="center" prop="text.amount"/>
 				<el-table-column label="税率" align="center" prop="text.tax_rate"/>
 				<el-table-column label="税额" align="center" prop="text.tax_amount"/>
-				
-				
 			</el-table>
     </div>
   </div>
 </template>
 
 <script>
-import axios from "axios";
-
+import {uploadInvoice} from "./api/api";
 export default {
   data() {
     return {
@@ -41,11 +42,6 @@ export default {
       ocrresult:  [],
     };
   },
-
-
-
-
-
   methods: {
     handleFileChange(event) {
       this.files = event.target.files;
@@ -53,23 +49,20 @@ export default {
     push() {
       this.$router.push({ path: "/upload" });
     },
+    
     async handleUpload() {
       const formData = new FormData();
       for (let file of this.files) {
         formData.append("files", file);
       }
       formData.append("language", this.language);
-
       try {
-        const response = await axios.post("http://localhost:8000/process_invoices/", formData, {
-          headers: { "Content-Type": "multipart/form-data" },
-        });
-              console.log("请求成功:", response.data.extracted_data);
-              this.downloadUrl = response.data.excel_file_path;
-              this.ocrresult = response.data.data.extracted_data;
-      } catch (error) {
-        console.error("处理发票失败:", error);
-      }
+          const response = await uploadInvoice(formData);
+            this.downloadUrl = response.data.download_link;//下载链接
+            this.ocrresult = response.data.extracted_data;//识别结果
+        } catch (error) {
+          console.error("处理发票失败:", error);
+        }
     },
   },
 };

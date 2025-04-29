@@ -1,13 +1,12 @@
 # 调用AI视觉模型的方式识别，这边用的是gemma3:4b
-
-
 import requests
 import base64
 from dotenv import load_dotenv
 import os
+from backend.core.config import settings
 # 加载环境变量
-load_dotenv()
-OLLAMA_PROXY_URL = os.getenv("OLLAMA_PROXY_URL")
+OLLAMA_PROXY_URL = settings.OLLAMA_PROXY_URL
+
 
 def extract_invoice_data_with_gemma(image_path):
     try:

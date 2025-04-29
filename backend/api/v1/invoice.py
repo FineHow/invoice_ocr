@@ -8,6 +8,7 @@ import uuid
 from pathlib import Path
 from backend.core.utils  import  umi_ocr,umi_invoice_data
 from backend.core.ziprar import handle_zip_uploaded
+from backend.core.download import save_excel
 from fastapi.middleware.cors import CORSMiddleware
 from PIL import Image
 import numpy as np
@@ -106,18 +107,21 @@ async def process_invoices(files: list[UploadFile], language: str = Form("chi_si
 
         else:
             return {"error": "文件格式错误，请上传 PDF 文件或 ZIP 文件！"}
-        # 保存数据到 Excel 并提供下载链接
+    
+    # 保存 Excel 文件   
     excel_file_path = output_dir / "extracted_data.xlsx"
-    # save_excel(extracted_data, str(excel_file_path))
+    save_excel(extracted_data, excel_file_path)
+
     body = {
         "message": "success",
         "code": 200,
         "status": 200,
-        "data":{
+        "data": {
             "extracted_data": extracted_data,
-            "excel_file_path": str(excel_file_path)
-        },
-
-    }
+            "excel_file_path": str(excel_file_path),
+            "download_link": f"{settings.APP_HOST}:{settings.APP_PORT}/api/v1/download/download/extracted_data.xlsx",
+            },
+        }
+        
 
     return body
