@@ -8,6 +8,7 @@ export const uploadInvoice = async (formData) => {
     {
         method: "POST",
         body: formData,
+        mode: "cors"  // 确保启用了跨域
     });
     const data = await response.json();
     return data;
