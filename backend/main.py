@@ -1,5 +1,5 @@
 from fastapi import FastAPI
-from backend.api.v1 import  invoice,download
+from backend.api.v1 import  invoice,download,normalocr
 from backend.core.config import settings
 import requests
 from fastapi.middleware.cors import CORSMiddleware
@@ -27,6 +27,7 @@ app.add_middleware(
 # 注册 API 路由
 app.include_router(invoice.router, prefix="/api/v1/invoice")
 app.include_router(download.router,prefix="/api/v1/download")
+app.include_router(normalocr.router,prefix="/api/v1/normalocr")
 
 
 # health检查tessart

@@ -1,9 +1,14 @@
 <template>
-  <div>
-    <h2>OCR功能测试系统</h2>
+    <div>
+      <h2>invoice_OCR 增值税发票识别使用介绍</h2>
+      <div align="center">
+        <img height="120" src="https://img.icons8.com/?size=100&id=r3Bj0vDMZ1Fi&format=png&color=000000">
+        <img height="120" src="https://gw.alipayobjects.com/zos/kitchen/qJ3l3EPsdW/split.svg">
+        <img height="120" src="https://img.icons8.com/?size=100&id=3jnrVS52owjR&format=png&color=000000">
+      </div>
       <div align="left">
-        <h2>发票识别测试</h2>
-        <p>自动识别和提取发票号码、开票日期、购买方名称、纳税人识别号、金额、税率和税额等信息。</p>
+        <h2>发票识别</h2>
+        <p>发票识别系统是一个基于深度学习的增值税发票识别工具，旨在帮助用户快速、准确地提取发票上的关键信息。该系统支持批量上传发票图片，并能够自动识别和提取发票号码、开票日期、购买方名称、纳税人识别号、金额、税率和税额等信息。</p>
         <p>支持发票pdf/zip上传到系统，生成一个包含识别结果的Excel文件</p>
       </div>
       <div align="left">
@@ -20,5 +25,6 @@
         <p>只提取发票号码、开票日期两个信息。</p>
         <p>支持发票pdf/zip上传到系统，生成一个包含识别结果的Excel文件</p>
       </div>
-  </div>
-</template>
+
+    </div>
+  </template>

@@ -24,8 +24,8 @@ app = FastAPI()
 
 from fastapi import APIRouter
 router = APIRouter()
-@router.post("/process_invoices/", tags=["发票OCR识别处理"])
-async def process_invoices(files: list[UploadFile], language: str = Form("chi_sim")):
+@router.post("/process_invoices2/", tags=["发票OCR识别处理"])
+async def process_invoices2(files: list[UploadFile], language: str = Form("chi_sim")):
     output_dir = Path("backend/static/")
     output_dir.mkdir(parents=True, exist_ok=True)  # 确保路径存在
     # 批量保存 PDF 到临时文件夹并从PDF提取图像
@@ -58,7 +58,7 @@ async def process_invoices(files: list[UploadFile], language: str = Form("chi_si
                     temp_image_path = output_dir / f"{pdf_file.stem}_page_{page_number + 1}.png"
                     pix.save(temp_image_path)
                     # 调用 OCR 处理图像
-                    ocr_result = umi_ocr(temp_image_path,ignoreArea=[[[0,0],[2000,938]],[[0,1300],[4000,3000]]])
+                    ocr_result = umi_ocr(temp_image_path)
                     ocr_result = umi_invoice_data(ocr_result)
                     print(f"处理结果: {ocr_result}")
 

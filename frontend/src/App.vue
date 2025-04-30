@@ -1,76 +1,46 @@
 <template>
-  <div class="container">
-    <h1>-----------------批量发票识别系统--------------</h1>
-    <!-- <el-button type="primary" @click="push">去往上传页面</el-button> -->
-    <form @submit.prevent="handleUpload">
-      <input type="file" multiple @change="handleFileChange" />
-      <el-button type="primary" @click="handleUpload">上传</el-button>
-      <!-- <button type="submit">上传处理</button> -->
-    </form>
-    <div v-if="downloadUrl">
-      <a :href="downloadUrl" target="_blank">
-        <el-button type="success" icon="el-icon-download">
-          下载结果 Excel
-        </el-button>
-      </a>
-    </div>
-    <div>{{ downloadUrl }}</div>
-    <div v-if="ocrresult">
-      <el-table :data="ocrresult" stripe tooltip-effect="dark" class="mt-10 table-default " width="1500px" >
-				<el-table-column label="文件名" align="center" prop="file"/>
-				<el-table-column label="页数" align="center" prop="page"/>
-				<el-table-column label="发票号码" align="center" prop="text.invoice_number"/>
-        <el-table-column label="开票日期" align="center" prop="text.invoice_date"/>
-        <el-table-column label="购买方名称" align="center" prop="text.buyer_name"/>
-				<el-table-column label="纳税人识别号" align="center" prop="text.buyer_tax_number"/>
-				<el-table-column label="金额" align="center" prop="text.amount"/>
-				<el-table-column label="税率" align="center" prop="text.tax_rate"/>
-				<el-table-column label="税额" align="center" prop="text.tax_amount"/>
-			</el-table>
-    </div>
+  <div class="common-layout">
+    <el-container class="layout-container-demo">
+      <el-header >
+        <h1>🚀ocr功能测试demo页面</h1>
+      </el-header>
+      <el-container  style="height: 500px">
+        <el-aside width="200px">
+          <el-menu :default-active="$route.path" router  text-color="#333" active-text-color="#409EFF">
+            <el-menu-item index="/"><router-link to="/">首页</router-link></el-menu-item>
+            <el-menu-item index="/invoice"><router-link to="/invoice">批量发票识别系统</router-link></el-menu-item>
+            <el-menu-item index="/ocr"><router-link to="/ocr">全文普通ocr</router-link></el-menu-item>
+            <el-menu-item index="/mark"><router-link to="/mark">mark相机月度核销</router-link></el-menu-item>
+            <el-menu-item index="/invoice2"><router-link to="/invoice2">发票识别_单两个字段</router-link></el-menu-item>
+            <el-menu-item index="/about"><router-link to="/about">关于使用</router-link></el-menu-item>
+          </el-menu>
+        </el-aside>
+      <el-container>
+          <el-main style="padding: 20px; width: 1500px;">
+            <router-view></router-view>
+          </el-main>
+        </el-container>
+      </el-container>
+    </el-container>
   </div>
 </template>
 
-<script>
-import {uploadInvoice} from "./api/api";
-export default {
-  data() {
-    return {
-      files: [],
-      language: "chi_sim",
-      downloadUrl: null,
-      ocrresult:  [],
-    };
-  },
-  methods: {
-    handleFileChange(event) {
-      this.files = event.target.files;
-    },
-    push() {
-      this.$router.push({ path: "/upload" });
-    },
-    
-    async handleUpload() {
-      const formData = new FormData();
-      for (let file of this.files) {
-        formData.append("files", file);
-      }
-      formData.append("language", this.language);
-      try {
-          const response = await uploadInvoice(formData);
-            this.downloadUrl = response.data.download_link;//下载链接
-            this.ocrresult = response.data.extracted_data;//识别结果
-        } catch (error) {
-          console.error("处理发票失败:", error);
-        }
-    },
-  },
-};
-</script>
-
 <style>
-.container {
-  /* max-width: 1600px; */
-  margin: 20px auto;
+/* 添加一些基本样式 */
+.common-layout{
+  display: flex;
+  flex-direction: column;
+  height: 100vh;
 }
+.common-layout .el-header {
+  background-color: var(--el-color-primary-light-8);
+  color: #606266;
+  padding: 20px;
+  margin: 20px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 15px;
+}
+
 </style>

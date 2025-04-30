@@ -29,31 +29,41 @@ def perform_ocr(image_path, language="chi_sim"):
         return str(e)
     
 
-def umi_ocr(image_path):
-    """调用 umi-OCR API 识别图像"""
+def umi_ocr(image_path, ignoreArea=None):
+    """
+    调用 umi-OCR API 识别图像
+    :param image_path: 图像的路径
+    :param ignoreArea: 可选参数，指定区域忽略设置的二维数组
+    """
     try:
-         with open(image_path, "rb") as image_file:
+        with open(image_path, "rb") as image_file:
             image_base64 = base64.b64encode(image_file.read()).decode('utf-8')
 
-            url=UMIOCR_API_BASE_URL + "/api/ocr"
-            print(url)
-            data = {
-                "base64": image_base64,
-                # 可选参数示例
-                "options": {
-                    "data.format": "text",
-                     "tbpu.ignoreArea": [[[0,0],[2000,938]],[[0,1300],[4000,3000]]]    
-                    ,
-                }
-            }
-            headers = {"Content-Type": "application/json"}
-            data_str = json.dumps(data)   # 字典转为 JSON 字符串
-            response = requests.post(url, data=data_str, headers=headers)
-            response.raise_for_status()
-            res_dict = json.loads(response.text)
-            # print(response)
-            print(res_dict)
-            return  res_dict.get('data', "")
+        url = UMIOCR_API_BASE_URL + "/api/ocr"
+        print(url)
+        
+        # 设置 options 数据
+        options = {
+            "data.format": "text"
+        }
+        
+        # 动态添加 tbpu.ignoreArea
+        if ignoreArea is not None:
+            options["tbpu.ignoreArea"] = ignoreArea
+        
+        data = {
+            "base64": image_base64,
+            "options": options,
+        }
+        
+        headers = {"Content-Type": "application/json"}
+        data_str = json.dumps(data)  # 字典转为 JSON 字符串
+        response = requests.post(url, data=data_str, headers=headers)
+        response.raise_for_status()
+        res_dict = json.loads(response.text)
+        print(res_dict)
+        return res_dict.get('data', "")
+
     except Exception as e:
         print("OCR 识别时发生错误:", e)
         return str(e)

@@ -24,8 +24,8 @@ app = FastAPI()
 
 from fastapi import APIRouter
 router = APIRouter()
-@router.post("/process_invoices/", tags=["发票OCR识别处理"])
-async def process_invoices(files: list[UploadFile], language: str = Form("chi_sim")):
+@router.post("/normalocr/", tags=["OCR识别"])
+async def process_invoices2(files: list[UploadFile], language: str = Form("chi_sim")):
     output_dir = Path("backend/static/")
     output_dir.mkdir(parents=True, exist_ok=True)  # 确保路径存在
     # 批量保存 PDF 到临时文件夹并从PDF提取图像
@@ -58,14 +58,12 @@ async def process_invoices(files: list[UploadFile], language: str = Form("chi_si
                     temp_image_path = output_dir / f"{pdf_file.stem}_page_{page_number + 1}.png"
                     pix.save(temp_image_path)
                     # 调用 OCR 处理图像
-                    ocr_result = umi_ocr(temp_image_path,ignoreArea=[[[0,0],[2000,938]],[[0,1300],[4000,3000]]])
-                    ocr_result = umi_invoice_data(ocr_result)
-                    print(f"处理结果: {ocr_result}")
+                    ocr_result = umi_ocr(temp_image_path)
 
                     extracted_data.append({
                         "file": pdf_file.name,
                         "page": page_number + 1,
-                        "text": ocr_result
+                        "text": str(ocr_result)
                     })
 
                     # 删除临时图像文件
@@ -91,13 +89,11 @@ async def process_invoices(files: list[UploadFile], language: str = Form("chi_si
                 pix.save(temp_image_path)
 
                 ocr_result = umi_ocr(temp_image_path)
-                ocr_result = umi_invoice_data(ocr_result)
-                print(f"处理结果: {ocr_result}")
 
                 extracted_data.append({
                     "file": file.filename,
                     "page": page_number + 1,
-                    "text": ocr_result
+                    "text": str(ocr_result)
                 })
 
                 temp_image_path.unlink()
@@ -109,8 +105,8 @@ async def process_invoices(files: list[UploadFile], language: str = Form("chi_si
             return {"error": "文件格式错误，请上传 PDF 文件或 ZIP 文件！"}
     
     # 保存 Excel 文件   
-    excel_file_path = output_dir / "extracted_data.xlsx"
-    save_excel(extracted_data, excel_file_path)
+    # excel_file_path = output_dir / "extracted_data.xlsx"
+    # save_excel(extracted_data, excel_file_path)
 
     body = {
         "message": "success",
@@ -118,7 +114,7 @@ async def process_invoices(files: list[UploadFile], language: str = Form("chi_si
         "status": 200,
         "data": {
             "extracted_data": extracted_data,
-            "excel_file_path": str(excel_file_path),
+            # "excel_file_path": str(excel_file_path),
             "download_link": f"{settings.APP_HOST}:{settings.APP_PORT}/api/v1/download/download/extracted_data.xlsx",
             },
         }

@@ -1,0 +1,72 @@
+<template>
+    <div class="container">
+      <h1>普通全图识别</h1>
+      <form @submit.prevent="handleUpload">
+        <input type="file" multiple @change="handleFileChange" />
+        <el-button type="primary" @click="handleUpload">上传</el-button>
+      </form>
+      <div v-if="downloadUrl">
+        <a :href="downloadUrl" target="_blank">
+          <el-button type="success" icon="el-icon-download">
+            下载结果 Excel
+          </el-button>
+        </a>
+      </div>
+      <div v-if="ocrresult">
+        <el-table :data="ocrresult" stripe tooltip-effect="dark" class="mt-10 table-default " width="1500px" >
+                  <el-table-column label="文件名" align="center" prop="file"/>
+                  <el-table-column label="页数" align="center" prop="page"/>
+                  <el-table-column label="识别的完整内容" align="center" prop="text.invoice_number"/>
+        </el-table>
+      </div>
+    </div>
+  </template>
+  
+  <script>
+  import {uploadInvoice} from "../api/api.js";
+  export default {
+  
+    
+    data() {
+      return {
+        files: [],
+        language: "chi_sim",
+        downloadUrl: null,
+        ocrresult:  [],
+      };
+    },
+  
+  
+    methods: {
+      handleFileChange(event) {
+        this.files = event.target.files;
+      },
+      push() {
+        this.$router.push({ path: "/upload" });
+      },
+      
+      async handleUpload() {
+        const formData = new FormData();
+        for (let file of this.files) {
+          formData.append("files", file);
+        }
+        formData.append("language", this.language);
+        try {
+            const response = await uploadInvoice(formData);
+              this.downloadUrl = response.data.download_link;//下载链接
+              this.ocrresult = response.data.extracted_data;//识别结果
+          } catch (error) {
+            console.error("处理发票失败:", error);
+          }
+      },
+    },
+  };
+  </script>
+  
+  <style>
+  .container {
+    /* max-width: 1600px; */
+    margin: 20px auto;
+  }
+  </style>
+  
